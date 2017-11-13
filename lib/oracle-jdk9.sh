@@ -80,7 +80,7 @@ EOF
       j2se_control=oracle_j9sdk_control
 
       oracle_bin_hl="idlj java javaws jjs jrunscript keytool orbd pack200 rmid rmiregistry servertool tnameserv unpack200"
-      oracle_bin_hl="jexec"
+      oracle_lib_hl="jexec"
       oracle_bin_jre="appletviewer jcontrol jweblauncher"
       oracle_bin_jdk="jaotc jar jarsigner javac javadoc javah javap javapackager jcmd jconsole jdb jdeprscan jdeps jhsdb jinfo jlink jmap jmod jps jshell jstack jstat jstatd policytool rmic schemagen serialver wsgen wsimport xjc"
 
