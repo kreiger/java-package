@@ -33,6 +33,36 @@ oracle_j2sdk_doc_detect() {
     fi
   fi
 
+  # GA release (jdk-9_doc-all.zip)
+  if [[ $archive_name =~ jdk-(9)()_docs?-all\.zip ]]
+  then
+    j2se_release=${BASH_REMATCH[1]}
+    j2se_update=${BASH_REMATCH[2]}
+    if [[ $j2se_update != "" ]]
+    then
+      j2se_version_name="$j2se_release Update $j2se_update"
+      j2se_version=${j2se_release}u${j2se_update}${revision}
+    else
+      j2se_version_name="$j2se_release GA"
+      j2se_version=${j2se_release}${revision}
+    fi
+  fi
+
+  # Early Access Release (jdk-9_doc-api-spec.tar.gz)
+  if [[ $archive_name =~ jdk-(9)()_doc-api-spec.tar.gz ]]
+  then
+    j2se_release=${BASH_REMATCH[1]}
+    j2se_update=${BASH_REMATCH[2]}
+    if [[ $j2se_update != "" ]]
+    then
+      j2se_version_name="$j2se_release Update $j2se_update Early Access Release"
+      j2se_version=${j2se_release}u${j2se_update}~ea${revision}
+    else
+      j2se_version_name="$j2se_release Early Access Release"
+      j2se_version=${j2se_release}~ea${revision}
+    fi
+  fi
+
   if [[ $j2se_release > 0 ]]
   then
     case "$j2se_release" in
