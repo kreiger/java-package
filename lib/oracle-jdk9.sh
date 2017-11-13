@@ -5,15 +5,15 @@ oracle_j9sdk_detect() {
 
   # GA release (jdk-9_linux-x64_bin.tar.gz)
   # Update release format isn't decided yet (might be 9.1, might be 18.3)
-  if [[ $archive_name =~ jdk-(9)()_linux-(x86|x64)_bin\.tar\.gz ]]
+  if [[ $archive_name =~ jdk-((9).*)_linux-(x86|x64)_bin\.tar\.gz ]]
   then
-    j2se_release=${BASH_REMATCH[1]}
-    j2se_update=${BASH_REMATCH[2]}
+    j2se_release=${BASH_REMATCH[2]}
+    j2se_update=${BASH_REMATCH[1]}
     j2se_arch=${BASH_REMATCH[3]}
     if [[ $j2se_update != "" ]]
     then
       j2se_version_name="$j2se_release Update $j2se_update"
-      j2se_version=${j2se_release}u${j2se_update}${revision}
+      j2se_version=${j2se_update}${revision}
     else
       j2se_version_name="$j2se_release GA"
       j2se_version=${j2se_release}${revision}
