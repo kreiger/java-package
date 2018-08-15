@@ -3,17 +3,16 @@ j2se_detect_oracle_j9re=oracle_j9re_detect
 oracle_j9re_detect() {
   j2se_release=0
 
-  # GA release (jre-9_linux-x64_bin.tar.gz)
-  # Update release format isn't decided yet (might be 9.1, might be 18.3)
-  if [[ $archive_name =~ ^jre-(9)()_linux-(x86|x64)_bin\.tar\.gz ]]
+  # GA release (jre-9_linux-x64_bin.tar.gz, jre-9.0.1_linux-x64_bin.tar.gz)
+  if [[ $archive_name =~ ^jre-(9|([1-9][0-9]+))((\.[0-9]+)*)_linux-(x64)_bin\.tar\.gz ]]
   then
     j2se_release=${BASH_REMATCH[1]}
-    j2se_update=${BASH_REMATCH[2]}
-    j2se_arch=${BASH_REMATCH[3]}
+    j2se_update=${BASH_REMATCH[3]}
+    j2se_arch=${BASH_REMATCH[5]}
     if [[ $j2se_update != "" ]]
     then
-      j2se_version_name="$j2se_release Update $j2se_update"
-      j2se_version=${j2se_release}u${j2se_update}${revision}
+      j2se_version_name="$j2se_release$j2se_update"
+      j2se_version=${j2se_release}${j2se_update}${revision}
     else
       j2se_version_name="$j2se_release GA"
       j2se_version=${j2se_release}${revision}
@@ -46,11 +45,11 @@ oracle_j9re_detect() {
     let compatible=1
 
     case "${DEB_BUILD_ARCH:-$DEB_BUILD_GNU_TYPE}" in
-      i386|i486-linux-gnu)
-        if [[ "$j2se_arch" != "x86" ]]; then compatible=0; fi
-        ;;
       amd64|x86_64-linux-gnu)
         if [[ "$j2se_arch" != "x64" ]]; then compatible=0; fi
+        ;;
+      *)
+        compatible=0
         ;;
     esac
 
@@ -79,9 +78,8 @@ EOF
       j2se_jinfo=oracle_j9re_jinfo
       j2se_control=oracle_j9re_control
 
-      oracle_bin_hl="idlj java javaws jjs jrunscript keytool orbd pack200 rmid rmiregistry servertool tnameserv unpack200"
+      oracle_bin_hl="appletviewer idlj java javaws jcontrol jjs jrunscript jweblauncher keytool orbd pack200 rmid rmiregistry servertool tnameserv unpack200"
       oracle_lib_hl="jexec"
-      oracle_bin_jre="appletviewer jcontrol jweblauncher"
 
       j2se_package="$j2se_vendor-java$j2se_release-jre"
       j2se_run
@@ -97,7 +95,6 @@ fi
 
 install_no_man_alternatives $jvm_base$j2se_name/bin $oracle_bin_hl
 install_no_man_alternatives $jvm_base$j2se_name/lib $oracle_lib_hl
-install_no_man_alternatives $jvm_base$j2se_name/bin $oracle_bin_jre
 EOF
 }
 
@@ -109,7 +106,6 @@ fi
 
 remove_alternatives $jvm_base$j2se_name/bin $oracle_bin_hl
 remove_alternatives $jvm_base$j2se_name/lib $oracle_lib_hl
-remove_alternatives $jvm_base$j2se_name/bin $oracle_bin_jre
 EOF
 }
 
